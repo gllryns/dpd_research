@@ -1,0 +1,11 @@
+export type ApiStyle='browser'|'v3';
+export const getSnowstormBase=()=>process.env.SNOWSTORM_BASE_URL||null;
+export const getApiStyle=():ApiStyle=>((process.env.SNOWSTORM_API_STYLE||'browser').toLowerCase()==='v3'?'v3':'browser');
+export const getBranch=()=>process.env.SNOWSTORM_BRANCH||'MAIN';
+const root=()=>{const b=getSnowstormBase(); if(!b) return null; const s=getApiStyle(); const br=encodeURIComponent(getBranch()); return s==='browser'?`${b}/snomed-ct/browser/${br}`:`${b}/snomed-ct/v3/browser/${br}`;};
+export const conceptUrl=(id:string)=>root()?`${root()}/concepts/${id}`:null;
+export const searchUrl=(term:string,offset=0,limit=12)=>root()?`${root()}/concepts?term=${encodeURIComponent(term)}&activeFilter=true&offset=${offset}&limit=${limit}`:null;
+export const parentsUrl=(id:string)=>root()?`${root()}/concepts/${id}/parents?form=INFERRED&limit=200`:null;
+export const childrenUrl=(id:string)=>root()?`${root()}/concepts/${id}/children?form=INFERRED&limit=200`:null;
+export const descriptionsUrl=(term:string,active=true,limit=50,offset=0)=>{const b=getSnowstormBase(); if(!b) return null; const s=getApiStyle(); const br=encodeURIComponent(getBranch()); const q=`term=${encodeURIComponent(term)}&active=${active?'true':'false'}&limit=${limit}&offset=${offset}`; return s==='browser'?`${b}/snomed-ct/browser/${br}/descriptions?${q}`:`${b}/snomed-ct/v3/browser/${br}/descriptions?${q}`;};
+export const diagramUrl=(id:string)=>{const b=getSnowstormBase(); if(!b) return null; const s=getApiStyle(); const br=encodeURIComponent(getBranch()); return s==='browser'?`${b}/snomed-ct/browser/${br}/concepts/${id}/diagram`:`${b}/snomed-ct/v3/browser/${br}/concepts/${id}/diagram`;};

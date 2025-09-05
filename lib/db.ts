@@ -1,0 +1,1 @@
+import { MongoClient } from 'mongodb'; let c:MongoClient|null=null; export async function getDb(){ const uri=process.env.MONGODB_URI as string; c??=new MongoClient(uri); await c.connect(); return c.db(); }

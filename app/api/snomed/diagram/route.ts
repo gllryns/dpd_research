@@ -1,0 +1,2 @@
+import { NextRequest } from 'next/server'; import { requireAuth } from '@/lib/session'; import { diagramUrl } from '@/lib/snowstorm';
+export async function GET(req:NextRequest){ await requireAuth(req); const id=new URL(req.url).searchParams.get('id'); const url=id?diagramUrl(id):null; if(!id||!url) return new Response('Missing id',{status:400}); const r=await fetch(url,{headers:{'Accept':'image/svg+xml'},cache:'no-store'}); const svg=await r.text(); return new Response(svg,{status:r.status,headers:{'Content-Type':'image/svg+xml'}}); }

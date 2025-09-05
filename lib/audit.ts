@@ -1,0 +1,1 @@
+import { getDb } from '@/lib/db'; export async function logAudit(e:any){ try{ const db=await getDb(); await db.collection('auditLogs').insertOne({...e,at:new Date()}); }catch{} }
